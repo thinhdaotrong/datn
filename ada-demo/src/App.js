@@ -9,8 +9,8 @@ const { Option } = Select;
 function App() {
   const [form] = Form.useForm();
 
-  const [result0, setResult0] = useState(null)
-  console.log("🚀 ~ file: App.js ~ line 13 ~ App ~ result0", result0)
+  const [result0, setResult0] = useState(null);
+  console.log("🚀 ~ file: App.js ~ line 13 ~ App ~ result0", result0);
   const [result1, setResult1] = useState(null);
   console.log("🚀 ~ file: App.js ~ line 13 ~ App ~ result1", result1);
   const [result2, setResult2] = useState(null);
@@ -59,7 +59,16 @@ function App() {
       <h1>Weighted SWM + Adaboost</h1>
       <div className="">
         <h2>Đầu vào</h2>
-        <Form form={form} layout="vertical" onFinish={onFinish}>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          initialValues={{
+            so_vong_lap: 50,
+            tham_so_svm: 100,
+            ti_le_test: 0.3,
+          }}
+        >
           <Form.Item label="Bộ dữ liệu" name="file">
             <Upload
               showUploadList={false}
@@ -95,15 +104,15 @@ function App() {
               <h3>SVM</h3>
               <div className="result">
                 <span>Precision:</span>
-                <span>{result0.precision["1.0"]}</span>
+                <span>{result0["precision"]["1"]}</span>
               </div>
               <div className="result">
                 <span>Recall:</span>
-                <span>{result0.recall["1.0"]}</span>
+                <span>{result0["recall"]["1"]}</span>
               </div>
               <div className="result">
                 <span>F1 score:</span>
-                <span>{result0["f1-score"]["1.0"]}</span>
+                <span>{result0["f1-score"]["1"]}</span>
               </div>
             </Col>
           )}
@@ -112,32 +121,32 @@ function App() {
               <h3>SVM + Adaboost</h3>
               <div className="result">
                 <span>Precision:</span>
-                <span>{result1.precision["1.0"]}</span>
+                <span>{result1["precision"]["1"]}</span>
               </div>
               <div className="result">
                 <span>Recall:</span>
-                <span>{result1.recall["1.0"]}</span>
+                <span>{result1["recall"]["1"]}</span>
               </div>
               <div className="result">
                 <span>F1 score:</span>
-                <span>{result1["f1-score"]["1.0"]}</span>
+                <span>{result1["f1-score"]["1"]}</span>
               </div>
             </Col>
           )}
           {result2 && (
             <Col md={8}>
-              <h3>SVM + Adaboost có cập nhật</h3>
+              <h3>SVM + Adaboost có thay đổi trọng số</h3>
               <div className="result">
                 <span>Precision:</span>
-                <span>{result2.precision["1.0"]}</span>
+                <span>{result2["precision"]["1"]}</span>
               </div>
               <div className="result">
                 <span>Recall:</span>
-                <span>{result2.recall["1.0"]}</span>
+                <span>{result2["recall"]["1"]}</span>
               </div>
               <div className="result">
                 <span>F1 score:</span>
-                <span>{result2["f1-score"]["1.0"]}</span>
+                <span>{result2["f1-score"]["1"]}</span>
               </div>
             </Col>
           )}

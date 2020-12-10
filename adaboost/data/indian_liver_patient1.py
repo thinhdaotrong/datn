@@ -4,7 +4,6 @@ from sklearn.impute import SimpleImputer
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 
 def load_data_2(path_csv, percent):
     #load data
@@ -22,29 +21,21 @@ def load_data_2(path_csv, percent):
     y = y.to_numpy()
     imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
     X[:,2:10] = imputer.fit_transform(X[ :,2:10])
-    # Analysis the data
-    labelencoder_X = LabelEncoder()
-    X[:, 1] = labelencoder_X.fit_transform(X[:, 1])
-    onehotencoder_X = OneHotEncoder(handle_unknown='ignore')
-    onehotencoder_X.fit_transform(X).toarray()
     X_train, X_test, y_train, y_test = tts(X, y, test_size = percent, random_state = 1)
-    
+
     #Sclaler data
     sc_X = StandardScaler()
     X_train = sc_X.fit_transform(X_train)
     X_test = sc_X.transform(X_test)
-    pca = PCA(n_components = None)
-
-    X_train  = pca.fit_transform(X_train)
-    X_test = pca.transform(X_test)  
-     
+    # Analysis the data
     pca = PCA(n_components = 6)
+
     X_train  = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
     
+    print(X_train.shape)
     #split data and label
     return X_train,X_test, y_train, y_test
-
 
 # =============================================================================
 # 

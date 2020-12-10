@@ -5,3 +5,5 @@ from .churn import (
     load_data_3)
 from .Vertebral_column import (
     load_data_1)
+from .seismic_bumps import (
+    load_data_4)
