@@ -104,15 +104,21 @@ function App() {
               <h3>SVM</h3>
               <div className="result">
                 <span>Precision:</span>
-                <span>{result0["precision"]["1"]}</span>
+                <span>
+                  {result0["precision"]["1"] || result0["precision"]["1.0"]}
+                </span>
               </div>
               <div className="result">
                 <span>Recall:</span>
-                <span>{result0["recall"]["1"]}</span>
+                <span>
+                  {result0["recall"]["1"] || result0["recall"]["1.0"]}
+                </span>
               </div>
               <div className="result">
                 <span>F1 score:</span>
-                <span>{result0["f1-score"]["1"]}</span>
+                <span>
+                  {result0["f1-score"]["1"] || result0["f1-score"]["1.0"]}
+                </span>
               </div>
             </Col>
           )}
@@ -121,15 +127,21 @@ function App() {
               <h3>SVM + Adaboost</h3>
               <div className="result">
                 <span>Precision:</span>
-                <span>{result1["precision"]["1"]}</span>
+                <span>
+                  {result1["precision"]["1"] || result1["precision"]["1.0"]}
+                </span>
               </div>
               <div className="result">
                 <span>Recall:</span>
-                <span>{result1["recall"]["1"]}</span>
+                <span>
+                  {result1["recall"]["1"] || result1["recall"]["1.0"]}
+                </span>
               </div>
               <div className="result">
                 <span>F1 score:</span>
-                <span>{result1["f1-score"]["1"]}</span>
+                <span>
+                  {result1["f1-score"]["1"] || result1["f1-score"]["1.0"]}
+                </span>
               </div>
             </Col>
           )}
@@ -138,15 +150,21 @@ function App() {
               <h3>SVM + Adaboost có thay đổi trọng số</h3>
               <div className="result">
                 <span>Precision:</span>
-                <span>{result2["precision"]["1"]}</span>
+                <span>
+                  {result2["precision"]["1"] || result2["precision"]["1.0"]}
+                </span>
               </div>
               <div className="result">
                 <span>Recall:</span>
-                <span>{result2["recall"]["1"]}</span>
+                <span>
+                  {result2["recall"]["1"] || result2["precision"]["1.0"]}
+                </span>
               </div>
               <div className="result">
                 <span>F1 score:</span>
-                <span>{result2["f1-score"]["1"]}</span>
+                <span>
+                  {result2["f1-score"]["1"] || result2["f1-score"]["1.0"]}
+                </span>
               </div>
             </Col>
           )}
