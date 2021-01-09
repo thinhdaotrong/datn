@@ -56,7 +56,7 @@ function App() {
   };
   return (
     <div className="container">
-      <h1>Weighted SWM + Adaboost</h1>
+      <h1>Sử dụng SVM và Adaboost cho bài toán phân lớp dữ liệu mất cân bằng </h1>
       <div className="">
         <h2>Đầu vào</h2>
         <Form
@@ -81,13 +81,13 @@ function App() {
             </Upload>
           </Form.Item>
           <Form.Item label="Số vòng lặp Adaboost" name="so_vong_lap">
-            <Input />
+            <Input placeholder="VD: 50" />
           </Form.Item>
           <Form.Item label="Tham số C trong SVM" name="tham_so_svm">
-            <Input />
+            <Input placeholder="VD: 100" />
           </Form.Item>
           <Form.Item label="Tỉ lệ tập kiểm thử" name="ti_le_test">
-            <Input />
+            <Input placeholder="VD: 0.3" />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
@@ -97,7 +97,7 @@ function App() {
         </Form>
       </div>
       <div>
-        <h2>Kết quả</h2>
+        {result0 && <h2>Kết quả</h2>}
         <Row>
           {result0 && (
             <Col md={8}>
@@ -105,20 +105,32 @@ function App() {
               <div className="result">
                 <span>Precision:</span>
                 <span>
-                  {result0["precision"]["1"] || result0["precision"]["1.0"]}
+                  {result0["precision"]["1"] ||
+                    result0["precision"]["1.0"] ||
+                    0}
                 </span>
               </div>
               <div className="result">
                 <span>Recall:</span>
                 <span>
-                  {result0["recall"]["1"] || result0["recall"]["1.0"]}
+                  {result0["recall"]["1"] || result0["recall"]["1.0"] || 0}
                 </span>
               </div>
+              {/* <div className="result">
+                <span>Specificity:</span>
+                <span>
+                  {result0["recall"]["-1"] || result0["recall"]["-1.0"] || 0}
+                </span>
+              </div> */}
               <div className="result">
                 <span>F1 score:</span>
                 <span>
-                  {result0["f1-score"]["1"] || result0["f1-score"]["1.0"]}
+                  {result0["f1-score"]["1"] || result0["f1-score"]["1.0"] || 0}
                 </span>
+              </div>
+              <div className="result">
+                <span>AUC:</span>
+                <span>{result0["auc"].toFixed(2)}</span>
               </div>
             </Col>
           )}
@@ -128,20 +140,32 @@ function App() {
               <div className="result">
                 <span>Precision:</span>
                 <span>
-                  {result1["precision"]["1"] || result1["precision"]["1.0"]}
+                  {result1["precision"]["1"] ||
+                    result1["precision"]["1.0"] ||
+                    0}
                 </span>
               </div>
               <div className="result">
                 <span>Recall:</span>
                 <span>
-                  {result1["recall"]["1"] || result1["recall"]["1.0"]}
+                  {result1["recall"]["1"] || result1["recall"]["1.0"] || 0}
                 </span>
               </div>
+              {/* <div className="result">
+                <span>Specificity:</span>
+                <span>
+                  {result1["recall"]["-1"] || result1["recall"]["-1.0"] || 0}
+                </span>
+              </div> */}
               <div className="result">
                 <span>F1 score:</span>
                 <span>
-                  {result1["f1-score"]["1"] || result1["f1-score"]["1.0"]}
+                  {result1["f1-score"]["1"] || result1["f1-score"]["1.0"] || 0}
                 </span>
+              </div>
+              <div className="result">
+                <span>AUC:</span>
+                <span>{result1["auc"].toFixed(2)}</span>
               </div>
             </Col>
           )}
@@ -151,20 +175,32 @@ function App() {
               <div className="result">
                 <span>Precision:</span>
                 <span>
-                  {result2["precision"]["1"] || result2["precision"]["1.0"]}
+                  {result2["precision"]["1"] ||
+                    result2["precision"]["1.0"] ||
+                    0}
                 </span>
               </div>
               <div className="result">
                 <span>Recall:</span>
                 <span>
-                  {result2["recall"]["1"] || result2["precision"]["1.0"]}
+                  {result2["recall"]["1"] || result2["recall"]["1.0"] || 0}
                 </span>
               </div>
+              {/* <div className="result">
+                <span>Specificity:</span>
+                <span>
+                  {result2["recall"]["-1"] || result2["recall"]["-1.0"] || 0}
+                </span>
+              </div> */}
               <div className="result">
                 <span>F1 score:</span>
                 <span>
-                  {result2["f1-score"]["1"] || result2["f1-score"]["1.0"]}
+                  {result2["f1-score"]["1"] || result2["f1-score"]["1.0"] || 0}
                 </span>
+              </div>
+              <div className="result">
+                <span>AUC:</span>
+                <span>{result2["auc"].toFixed(2)}</span>
               </div>
             </Col>
           )}

@@ -4,10 +4,12 @@ from flask_cors import CORS, cross_origin
 import os
 import socket
 import uuid
+from data.common import load_data
 from data.Vertebral_column import load_data_1
 from data.indian_liver_patient import load_data_2
 from data.churn import load_data_3
 from data.seismic_bumps import load_data_4
+from data.spect_heart import load_data_5
 from sklearn.metrics import classification_report
 import trainning_of_adaboost as toa
 from methods import get_eval
@@ -73,8 +75,7 @@ CORS(app, support_credentials=True)
 def query():
     m = request.args.get('m', default=50, type=int)
     c = request.args.get('c', default=100, type=int)
-    instance_categorization = request.args.get(
-        'instance_categorization', default='true', type=str)
+    instance_categorization = request.args.get('instance_categorization', default='true', type=str)
     instance_categorization = instance_categorization.lower()
     if instance_categorization == 'false':
         instance_categorization = False
@@ -94,6 +95,9 @@ def query():
             return jsonify_str(create_response("", "", ""))
     else:
         return jsonify_str(create_response("", "", ""))
+    if 'co_author' in filename:
+        X_train, X_test, y_train, y_test = load_data(
+            name_save_csv, percent_test)
     if filename == 'Vertebral_column.csv':
         X_train, X_test, y_train, y_test = load_data_1(
             name_save_csv, percent_test)
@@ -106,9 +110,11 @@ def query():
     if filename == 'seismic_bumps.csv':
         X_train, X_test, y_train, y_test = load_data_4(
             name_save_csv, percent_test)
+    if filename == 'Spect_Heart.csv':
+        X_train, X_test, y_train, y_test = load_data_5(
+            name_save_csv, percent_test)
     os.remove(name_save_csv)
-    w, b, a = toa.fit(X_train, y_train, M=m, C=c,
-                      instance_categorization=instance_categorization)
+    w, b, a = toa.fit(X_train, y_train, M=m, C=c, instance_categorization=instance_categorization)
     test_pred = toa.predict(X_test, w, b, a, M=m)
     result = get_eval(test_pred, y_test)
 
@@ -141,6 +147,9 @@ def query1():
             return jsonify_str(create_response("", "", ""))
     else:
         return jsonify_str(create_response("", "", ""))
+    if 'co_author' in filename:
+        X_train, X_test, y_train, y_test = load_data(
+            name_save_csv, percent_test)
     if filename == 'Vertebral_column.csv':
         X_train, X_test, y_train, y_test = load_data_1(
             name_save_csv, percent_test)
@@ -153,8 +162,11 @@ def query1():
     if filename == 'seismic_bumps.csv':
         X_train, X_test, y_train, y_test = load_data_4(
             name_save_csv, percent_test)
+    if filename == 'Spect_Heart.csv':
+        X_train, X_test, y_train, y_test = load_data_5(
+            name_save_csv, percent_test)
     os.remove(name_save_csv)
-    w, b = svm.fit(X_train, y_train, C=100)
+    w, b = svm.fit(X_train, y_train, C=c)
     test_pred = np.sign(X_test.dot(w)+b)
     result = get_eval(test_pred, y_test)
 

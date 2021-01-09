@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd 
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder, MinMaxScaler
 from sklearn.model_selection import train_test_split as tts
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
@@ -34,13 +34,15 @@ def load_data_3(path_csv, percent):
     onehotencoder_X = OneHotEncoder()
     onehotencoder_X.fit_transform(X).toarray()
     #Split data
+    scaler = MinMaxScaler()
+    X = scaler.fit_transform(X)
     X_train, X_test, y_train, y_test = tts(X, y, test_size = percent, random_state = 1)
-    #Scalling Data
-    sc_X = StandardScaler()
-    X_train = sc_X.fit_transform(X_train)
-    X_test = sc_X.transform(X_test)
-    #Analys data
-    pca = PCA(n_components = 15)
-    X_train  = pca.fit_transform(X_train)
-    X_test = pca.transform(X_test)
+    # #Scalling Data
+    # sc_X = StandardScaler()
+    # X_train = sc_X.fit_transform(X_train)
+    # X_test = sc_X.transform(X_test)
+    # #Analys data
+    # pca = PCA(n_components = 15)
+    # X_train  = pca.fit_transform(X_train)
+    # X_test = pca.transform(X_test)
     return X_train,X_test, y_train, y_test

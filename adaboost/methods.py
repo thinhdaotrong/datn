@@ -1,5 +1,7 @@
 import numpy as np
 from sklearn.metrics import classification_report
+from sklearn.metrics import auc, roc_curve, roc_auc_score, precision_score, recall_score, f1_score
+
 
 def intinitialization_weight_adjustment(N):
     '''
@@ -50,6 +52,7 @@ def confident(W, false_index):
 
 
 def update_weight_adjustment(W, alpha, true_index, false_index):
+    print("W truoc: ", np.sum(W))
     '''
     Input:
         W: i-th weight adjustment
@@ -60,6 +63,8 @@ def update_weight_adjustment(W, alpha, true_index, false_index):
     '''
     W[true_index] = W[true_index] * np.exp(-1 * alpha)
     W[false_index] = W[false_index] * np.exp(alpha)
+    print("W sau: ", np.sum(W))
+
     return W / np.sum(W)
 
 
@@ -69,10 +74,13 @@ def update_instance_categorization(X, y, w, b):
     A = 1 - y * (X.dot(w) + b)
     # BSV_weight
     num_of_BSV = np.where((A > 0) & (A < 2))[0].shape[0]
+    print(num_of_BSV)
     pos_BSV = np.where((A > 0) & (A < 2) & (y == 1))[0]
     num_of_pos_BSV = pos_BSV.shape[0]
+    print(num_of_pos_BSV)
     neg_BSV = np.where((A > 0) & (A < 2) & (y == -1))[0]
     num_of_neg_BSV = neg_BSV.shape[0]
+    print(num_of_neg_BSV)
     if (num_of_pos_BSV != 0):
         C[pos_BSV] = num_of_BSV / (2 * (num_of_pos_BSV))
     if (num_of_neg_BSV != 0):
@@ -89,10 +97,135 @@ def update_instance_categorization(X, y, w, b):
         if (num_of_neg_SV != 0):
             C[neg_SV] = num_of_SV / (2 * num_of_neg_SV)
     # positive noise
-    positive_noise = np.where(((A <= 2) & (y == 1)))[0]
+    # positive_noise = np.where(((A <= 2) & (y == 1)))[0]
+    positive_noise = np.where(((A > 2) & (y == -1)))[0]
     num_of_positive_noise = positive_noise.shape[0]
     num_of_positive = np.where(y == 1)[0].shape[0]
     C[positive_noise] = np.exp(num_of_positive_noise / num_of_positive)
+
+    return C
+
+def update_instance_categorization_2(X, y, w, b):
+    # Obtain categorization_weight
+    C = np.ones(X.shape[0])
+    B = (X.dot(w) + b)
+    A = 1 - y * (X.dot(w) + b)
+    # BSV_weight
+    num_of_BSV = np.where((-1 < B) & (B < 1))[0].shape[0]
+    print(num_of_BSV)
+    pos_BSV = np.where((0 < B) & (B < 1) & (y == 1))[0]
+    num_of_pos_BSV = pos_BSV.shape[0]
+    print(num_of_pos_BSV)
+    neg_BSV = np.where((-1 < B) & (B < 0) & (y == -1))[0]
+    num_of_neg_BSV = neg_BSV.shape[0]
+    print(num_of_neg_BSV)
+    if (num_of_pos_BSV != 0):
+        C[pos_BSV] = num_of_BSV / (2 * (num_of_pos_BSV))
+    if (num_of_neg_BSV != 0):
+        C[neg_BSV] = num_of_BSV / (2 * (num_of_neg_BSV))
+    # SV weight
+    num_of_SV = np.where((B == -1) | (B == 1))[0].shape[0]
+    if (num_of_SV != 0):
+        pos_SV = np.where((B == 1) & (y == 1))[0]
+        num_of_pos_SV = pos_SV.shape[0]
+        if (num_of_pos_SV != 0):
+            C[pos_SV] = num_of_SV / (2 * num_of_pos_SV)
+        neg_SV = np.where((B == -1) & (y == -1))[0]
+        num_of_neg_SV = neg_SV.shape[0]
+        if (num_of_neg_SV != 0):
+            C[neg_SV] = num_of_SV / (2 * num_of_neg_SV)
+    # positive noise
+    # positive_noise = np.where(((A <= 2) & (y == 1)))[0]
+    # positive_noise = np.where(((A > 2) & (y == -1)))[0]
+    positive_noise = np.where(((B > 1) & (y == -1)))[0]
+    num_of_positive_noise = positive_noise.shape[0]
+    num_of_positive = np.where(y == 1)[0].shape[0]
+    C[positive_noise] = np.exp(num_of_positive_noise / num_of_positive)
+
+    return C
+
+def update_instance_categorization_3(X, y, w, b):
+    # Obtain categorization_weight
+    C = np.ones(X.shape[0])
+    B = (X.dot(w) + b)
+    A = 1 - y * (X.dot(w) + b)
+    # BSV_weight
+    num_of_BSV = np.where((-1 < B) & (B < 1))[0].shape[0]
+    print(num_of_BSV)
+    pos_BSV = np.where((0 < B) & (B < 1))[0]
+    num_of_pos_BSV = pos_BSV.shape[0]
+    print(num_of_pos_BSV)
+    neg_BSV = np.where((-1 < B) & (B < 0))[0]
+    num_of_neg_BSV = neg_BSV.shape[0]
+    print(num_of_neg_BSV)
+    if (num_of_pos_BSV != 0):
+        C[pos_BSV] = num_of_BSV / (2 * (num_of_pos_BSV))
+    if (num_of_neg_BSV != 0):
+        C[neg_BSV] = num_of_BSV / (2 * (num_of_neg_BSV))
+    # SV weight
+    num_of_SV = np.where((B == -1) | (B == 1))[0].shape[0]
+    if (num_of_SV != 0):
+        pos_SV = np.where((B == 1))[0]
+        num_of_pos_SV = pos_SV.shape[0]
+        if (num_of_pos_SV != 0):
+            C[pos_SV] = num_of_SV / (2 * num_of_pos_SV)
+        neg_SV = np.where((B == -1))[0]
+        num_of_neg_SV = neg_SV.shape[0]
+        if (num_of_neg_SV != 0):
+            C[neg_SV] = num_of_SV / (2 * num_of_neg_SV)
+    # positive noise
+    # positive_noise = np.where(((A <= 2) & (y == 1)))[0]
+    # positive_noise = np.where(((A > 2) & (y == -1)))[0]
+    positive_noise = np.where(((B > 1) & (y == -1)))[0]
+    num_of_positive_noise = positive_noise.shape[0]
+    # num_of_positive = np.where(y == 1)[0].shape[0]
+    num_of_positive = np.where(B > 0)[0].shape[0]
+    C[positive_noise] = np.exp(num_of_positive_noise / num_of_positive)
+
+    return C
+
+def update_instance_categorization_final(X, y, w, b):
+    # Obtain categorization_weight
+    C = np.ones(X.shape[0])
+    B = (X.dot(w) + b)
+    A = 1 - y * (X.dot(w) + b)
+    # BSV_weight
+    num_of_BSV = np.where((-1 < B) & (B < 1))[0].shape[0]
+    # print(num_of_BSV)
+    pos_BSV = np.where((0 < B) & (B < 1))[0]
+    num_of_pos_BSV = pos_BSV.shape[0]
+    # print(num_of_pos_BSV)
+    neg_BSV = np.where((-1 < B) & (B < 0))[0]
+    num_of_neg_BSV = neg_BSV.shape[0]
+    # print(num_of_neg_BSV)
+    nhan_duong_BSV = np.where((-1 < B) & (B < 1) & (y == 1))[0]
+    nhan_am_BSV = np.where((-1 < B) & (B < 1) & (y == -1))[0]
+    if (num_of_pos_BSV != 0):
+        C[nhan_duong_BSV] = num_of_BSV / (2 * (num_of_pos_BSV))
+    if (num_of_neg_BSV != 0):
+        C[nhan_am_BSV] = num_of_BSV / (2 * (num_of_neg_BSV))
+    # SV weight
+    num_of_SV = np.where((B == -1) | (B == 1))[0].shape[0]
+    if (num_of_SV != 0):
+        pos_SV = np.where((B == 1))[0]
+        num_of_pos_SV = pos_SV.shape[0]
+        nhan_duong_SV = np.where(((B == -1) | (B == 1)) & (y == 1))[0]
+        nhan_am_SV = np.where(((B == -1) | (B == 1)) & (y == -1))[0]
+        if (num_of_pos_SV != 0):
+            C[nhan_duong_SV] = num_of_SV / (2 * num_of_pos_SV)
+        neg_SV = np.where((B == -1))[0]
+        num_of_neg_SV = neg_SV.shape[0]
+        if (num_of_neg_SV != 0):
+            C[nhan_am_SV] = num_of_SV / (2 * num_of_neg_SV)
+    # positive noise
+    # positive_noise = np.where(((A <= 2) & (y == 1)))[0]
+    # positive_noise = np.where(((A > 2) & (y == -1)))[0]
+    positive_noise = np.where(((B > 1) & (y == -1)))[0]
+    num_of_positive_noise = positive_noise.shape[0]
+    # num_of_positive = np.where(y == 1)[0].shape[0]
+    num_of_positive = np.where(B > 0)[0].shape[0]
+    if (num_of_positive != 0):
+        C[positive_noise] = np.exp(num_of_positive_noise / num_of_positive)
 
     return C
 
@@ -119,5 +252,7 @@ def get_eval(test_pred, y_test):
         for key in dict_result.keys():
             dict_result[key][arr[0]] = float(arr[count + 1])
             count += 1
+    # dict_result["auc"] = auc(fpr, tpr)
+    dict_result["auc"] = roc_auc_score(y_test, test_pred)
     dict_result["accuracy"] = acc
     return dict_result
