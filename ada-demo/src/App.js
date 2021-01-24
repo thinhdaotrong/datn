@@ -64,7 +64,7 @@ function App() {
           layout="vertical"
           onFinish={onFinish}
           initialValues={{
-            so_vong_lap: 50,
+            so_vong_lap: 10,
             tham_so_svm: 100,
             ti_le_test: 0.3,
           }}
@@ -100,6 +100,8 @@ function App() {
         {result0 && <h2>Kết quả</h2>}
         <Row>
           {result0 && (
+            <>
+            {file.name.indexOf('co_author') === -1 && 
             <Col md={8}>
               <h3>SVM</h3>
               <div className="result">
@@ -116,12 +118,6 @@ function App() {
                   {result0["recall"]["1"] || result0["recall"]["1.0"] || 0}
                 </span>
               </div>
-              {/* <div className="result">
-                <span>Specificity:</span>
-                <span>
-                  {result0["recall"]["-1"] || result0["recall"]["-1.0"] || 0}
-                </span>
-              </div> */}
               <div className="result">
                 <span>F1 score:</span>
                 <span>
@@ -133,6 +129,8 @@ function App() {
                 <span>{result0["auc"].toFixed(2)}</span>
               </div>
             </Col>
+}
+            </>
           )}
           {result1 && (
             <Col md={8}>
@@ -151,12 +149,6 @@ function App() {
                   {result1["recall"]["1"] || result1["recall"]["1.0"] || 0}
                 </span>
               </div>
-              {/* <div className="result">
-                <span>Specificity:</span>
-                <span>
-                  {result1["recall"]["-1"] || result1["recall"]["-1.0"] || 0}
-                </span>
-              </div> */}
               <div className="result">
                 <span>F1 score:</span>
                 <span>
@@ -186,12 +178,6 @@ function App() {
                   {result2["recall"]["1"] || result2["recall"]["1.0"] || 0}
                 </span>
               </div>
-              {/* <div className="result">
-                <span>Specificity:</span>
-                <span>
-                  {result2["recall"]["-1"] || result2["recall"]["-1.0"] || 0}
-                </span>
-              </div> */}
               <div className="result">
                 <span>F1 score:</span>
                 <span>

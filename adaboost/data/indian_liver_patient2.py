@@ -1,4 +1,3 @@
-from data.common import TangQuangHuy
 import pandas as pd
 from sklearn.model_selection import train_test_split as tts
 from sklearn.impute import SimpleImputer

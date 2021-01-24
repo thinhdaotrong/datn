@@ -1,3 +1,4 @@
+from data.common2 import load_data_7
 from random import choice
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
@@ -5,6 +6,7 @@ import os
 import socket
 import uuid
 from data.common import load_data
+from data.common1 import load_data_6
 from data.Vertebral_column import load_data_1
 from data.indian_liver_patient import load_data_2
 from data.churn import load_data_3
@@ -95,8 +97,17 @@ def query():
             return jsonify_str(create_response("", "", ""))
     else:
         return jsonify_str(create_response("", "", ""))
-    if 'co_author' in filename:
+    # if 'co_author' in filename:
+    #     X_train, X_test, y_train, y_test = load_data(
+    #         name_save_csv, percent_test)
+    if filename == 'co_author_02.csv':
         X_train, X_test, y_train, y_test = load_data(
+            name_save_csv, percent_test)
+    if filename == 'co_author_01.csv':
+        X_train, X_test, y_train, y_test = load_data_6(
+            name_save_csv, percent_test)
+    if filename == 'co_author_03.csv':
+        X_train, X_test, y_train, y_test = load_data_7(
             name_save_csv, percent_test)
     if filename == 'Vertebral_column.csv':
         X_train, X_test, y_train, y_test = load_data_1(

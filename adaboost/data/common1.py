@@ -5,7 +5,6 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.ensemble import AdaBoostClassifier
-# import xlsxwriter
 
 def RemoveNegative(x_origin, y_origin, remove_length):
     x_positive = []
@@ -69,7 +68,7 @@ def RemovePositive(x_origin, y_origin, remove_length):
 
 
 
-def load_data(path_csv, percent):
+def load_data_6(path_csv, percent):
     data = pd.read_csv(path_csv)
     diag_map = {0: -1, 1: 1}
     data['Label'] = data['Label'].map(diag_map)
@@ -96,34 +95,9 @@ def load_data(path_csv, percent):
     Y = data['Label']
     Y = Y.to_numpy()
 
-    # wb = xlsxwriter.Workbook("co_author_abcd.xlsx")
-    # ws = wb.add_worksheet()
-    #
-    # ws.write(0, 0, "CommonNeighbor")
-    # ws.write(0, 1, "AdamicAdar")
-    # ws.write(0, 2, "JaccardCoefficient")
-    # ws.write(0, 3, "PreferentialAttachment")
-    # ws.write(0, 4, "ResourceAllocation")
-    # ws.write(0, 5, "ShortestPath")
-    # ws.write(0, 6, "CommonCountry")
-    # ws.write(0, 7, "Label")
-    # row, col = 1, 0
-    #
-    # for i in range(len(X)):
-    #     ws.write(row, col, X[i][col])
-    #     ws.write(row, col + 1, X[i][col + 1])
-    #     ws.write(row, col + 2, X[i][col + 2])
-    #     ws.write(row, col + 3, X[i][col + 3])
-    #     ws.write(row, col + 4, X[i][col + 4])
-    #     ws.write(row, col + 5, X[i][col + 5])
-    #     ws.write(row, col + 6, X[i][col + 6])
-    #     ws.write(row, col + 7, Y[i])
-    #     row = row + 1
-    # wb.close()
-
-    # X, Y = RemoveNegative(X, Y, 604)  
-    # X, Y = RemovePositive(X, Y, 12)
-
+    X, Y = RemoveNegative(X, Y, 604)  
+    X, Y = RemovePositive(X, Y, 12)
+    
     # X, Y = RemovePositive(X, Y, 150)
 
     print(np.sum((Y == 1).astype("uint8")))
